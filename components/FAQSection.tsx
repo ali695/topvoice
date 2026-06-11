@@ -3,39 +3,40 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 
 const FAQS = [
   {
-    q: 'How does voice generation work?',
-    a: 'VoiceGen Studio uses a backend TTS provider abstraction. Your text and settings are sent to our secure API, which processes them through the configured TTS engine and returns a high-quality audio file. No audio processing happens in the browser.',
+    q: 'Is VoiceGen Studio free?',
+    a: 'Yes — completely. The current version uses your browser\'s built-in speech engine. No API key, no account, no payment.',
   },
   {
-    q: 'What TTS providers do you support?',
-    a: 'The platform supports a pluggable provider system. In development mode, a mock provider demonstrates the full workflow. Production supports external API-based TTS providers configured via environment variables. Local model support is planned for future releases.',
+    q: 'Does it use paid APIs like ElevenLabs or OpenAI?',
+    a: 'No. Zero external API calls in the free version. Everything runs locally in your browser using the Web Speech API.',
   },
   {
-    q: 'Are the Quranic recitation presets respectful?',
-    a: 'Yes. All Quranic recitation presets use generic style labels (e.g., "Saudi Qari Style", "Egyptian Murattal Style") and do not claim to clone or imitate any real named reciter. The controls focus on pacing, breath, clarity, and emotional resonance to support proper recitation production.',
+    q: 'Why do voices sound different on different devices?',
+    a: 'Voice quality depends on your OS and browser. Chrome and Edge on Windows/Mac have the best selection. Safari on iOS is also strong. Firefox is more limited.',
   },
   {
-    q: 'Can I use these voices commercially?',
-    a: 'Commercial usage rights depend on your plan and the configured TTS provider\'s terms of service. Creator and Studio plans include commercial licensing for your generated audio content.',
+    q: 'Can I use it for YouTube?',
+    a: 'Yes. Browser-synthesized audio is yours to use commercially. Disclose AI-generated audio where required by platform policies.',
   },
   {
-    q: 'What languages are supported?',
-    a: 'VoiceGen Studio supports 11 languages: English, Urdu, German, Arabic, Hindi, Turkish, Spanish, French, Japanese, Russian, and Chinese (Mandarin). Arabic includes RTL support and Tajweed-aware pacing controls.',
+    q: 'Can I save my presets?',
+    a: 'Yes. Favorite any preset with the heart icon. Favorites persist in your browser\'s localStorage.',
   },
   {
-    q: 'What are sub-presets?',
-    a: 'Sub-presets are automatically generated variations of the seed presets. Each seed preset has variants like Cinematic Trailer, Podcast, Whisper Mode, High Clarity, Emotional+, and more. Sub-presets adjust settings within valid ranges while keeping the character of the parent voice.',
+    q: 'Can I export MP3?',
+    a: 'Not yet. The Web Speech API doesn\'t support audio capture. Use OS screen recording tools (OBS, Audacity) to capture audio. MP3 export is planned for a future premium version.',
   },
   {
-    q: 'Is there an API?',
-    a: 'Yes. The Python FastAPI backend exposes REST endpoints for voice generation, preset browsing, and history management. API documentation is available at /api-docs.',
+    q: 'Does it support Urdu, Arabic, German, Turkish, Hindi?',
+    a: 'Yes — 11 languages are supported in the preset system. Voice availability for each language depends on your OS. Chrome provides the best multilingual coverage.',
   },
   {
-    q: 'How long does generation take?',
-    a: 'Generation time depends on text length and the configured TTS provider. Short clips (under 500 characters) typically complete in 1–3 seconds. Longer narrations may take 5–15 seconds. Long-form audio (30+ minutes) uses background job processing.',
+    q: 'Can I add paid cloud voices later?',
+    a: 'Yes. The backend architecture supports ElevenLabs, OpenAI TTS, and other providers. Configure via environment variables when ready.',
   },
 ];
 
@@ -43,37 +44,39 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-24 relative">
+    <section id="faq" className="py-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-            Frequently Asked{' '}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">
+            Common{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
               Questions
             </span>
           </h2>
+          <p className="text-white/45">
+            More detailed answers in the{' '}
+            <Link href="/faq" className="text-violet-400 hover:text-violet-300 underline underline-offset-2">
+              full FAQ page
+            </Link>.
+          </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {FAQS.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
+              transition={{ delay: i * 0.04 }}
               className="rounded-xl border border-white/8 bg-white/3 overflow-hidden"
             >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left"
+                className="w-full flex items-center justify-between px-5 py-4 text-left gap-4"
               >
                 <span className="font-medium text-white text-sm">{faq.q}</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-white/40 flex-shrink-0 ml-4 transition-transform ${
-                    open === i ? 'rotate-180' : ''
-                  }`}
-                />
+                <ChevronDown className={`w-4 h-4 text-white/35 flex-shrink-0 transition-transform ${open === i ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {open === i && (
@@ -84,9 +87,7 @@ export function FAQSection() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-5 pb-4 text-sm text-white/60 leading-relaxed">
-                      {faq.a}
-                    </p>
+                    <p className="px-5 pb-4 text-sm text-white/55 leading-relaxed">{faq.a}</p>
                   </motion.div>
                 )}
               </AnimatePresence>

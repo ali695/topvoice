@@ -2,69 +2,61 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Zap, Library, Play, Sparkles, ArrowRight, Mic2 } from 'lucide-react';
+import { Zap, Library, ArrowRight, Sparkles, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WaveformBackground } from './WaveformBackground';
-import { SEED_PRESETS } from '@/data/seedPresets';
-import { VibeBadge } from './VibeBadge';
 
-const FLOATING_CARDS = SEED_PRESETS.slice(0, 6).map((p) => ({
-  name: p.name,
-  vibe: p.vibe,
-  category: p.category,
-}));
-
-const STAT_ITEMS = [
+const STATS = [
   { value: '130+', label: 'Voice Presets' },
+  { value: '100+', label: 'Sub-Presets' },
   { value: '11', label: 'Languages' },
-  { value: '23+', label: 'Accents' },
-  { value: '32', label: 'Vibes' },
+  { value: '$0', label: 'No Paid API' },
+];
+
+const CHIPS = [
+  'Horror', 'TikTok', 'Documentary', 'Quranic Style',
+  'Sleep Learning', 'ASMR', 'Cyberpunk', 'Trailer Voice',
+  'Urdu Emotional', 'German Soft', 'Turkish Soft', 'British Cinematic',
 ];
 
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Deep space background */}
+      {/* Backgrounds */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#07070f] via-[#0a0815] to-[#07070f]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.12)_0%,transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(6,182,212,0.08)_0%,transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(139,92,246,0.14)_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(6,182,212,0.07)_0%,transparent_50%)]" />
 
-      {/* Waveform */}
-      <WaveformBackground className="opacity-40" />
-
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
+      {/* Grid */}
+      <div className="absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
         }}
       />
 
-      {/* Floating preset chips */}
+      <WaveformBackground className="opacity-35" />
+
+      {/* Floating chips */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {FLOATING_CARDS.map((card, i) => (
+        {CHIPS.map((chip, i) => (
           <motion.div
-            key={i}
-            className="absolute glass rounded-xl px-3 py-2 flex items-center gap-2 hidden lg:flex"
+            key={chip}
+            className="absolute hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs text-white/60 whitespace-nowrap"
             style={{
-              left: `${[8, 75, 5, 80, 10, 72][i]}%`,
-              top: `${[20, 15, 65, 60, 45, 40][i]}%`,
+              left: `${[6, 74, 4, 80, 8, 76, 5, 82, 7, 77, 3, 79][i % 12]}%`,
+              top: `${[18, 14, 72, 65, 42, 38, 55, 25, 82, 48, 30, 60][i % 12]}%`,
             }}
-            animate={{
-              y: [0, -10, 0],
-              opacity: [0.5, 0.75, 0.5],
-            }}
+            animate={{ y: [0, -10, 0], opacity: [0.4, 0.7, 0.4] }}
             transition={{
-              duration: 4 + i * 0.7,
+              duration: 4 + i * 0.6,
               repeat: Infinity,
-              delay: i * 0.8,
+              delay: i * 0.5,
               ease: 'easeInOut',
             }}
           >
-            <Mic2 className="w-3 h-3 text-violet-400" />
-            <span className="text-xs text-white/70 whitespace-nowrap">{card.name}</span>
-            <VibeBadge vibe={card.vibe} size="sm" />
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+            {chip}
           </motion.div>
         ))}
       </div>
@@ -79,8 +71,8 @@ export function HeroSection() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-sm font-medium mb-8"
         >
           <Sparkles className="w-3.5 h-3.5" />
-          130+ Voice Presets • 11 Languages • Real-Time Generation
-          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          100% Free • No API Key • Runs in Your Browser
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         </motion.div>
 
         {/* Headline */}
@@ -90,12 +82,10 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight mb-6"
         >
-          Generate{' '}
+          Generate Viral AI Voices{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-400 to-violet-400">
-            Viral AI Voices
+            Directly in Your Browser
           </span>
-          <br />
-          in Every Style
         </motion.h1>
 
         {/* Subheadline */}
@@ -103,18 +93,19 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-white/55 max-w-3xl mx-auto mb-10 leading-relaxed"
         >
-          Create cinematic narrations, horror whispers, TikTok voices, Quranic-style Arabic recitation controls,
-          sleep learning audio, character voices, and multilingual voiceovers — all from one studio.
+          Create cinematic narrations, horror whispers, TikTok-style voices, sleep learning audio,
+          character voices, multilingual voiceovers, and Arabic recitation-style pacing controls
+          using <span className="text-emerald-400 font-medium">free browser-based voice technology</span>.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
         >
           <Button variant="glow" size="xl" asChild>
             <Link href="/generate" className="flex items-center gap-2">
@@ -131,48 +122,39 @@ export function HeroSection() {
           </Button>
         </motion.div>
 
-        {/* Stats */}
+        {/* Trust stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-10"
         >
-          {STAT_ITEMS.map(({ value, label }) => (
-            <div key={label} className="glass rounded-xl p-4 text-center">
+          {STATS.map(({ value, label }) => (
+            <div key={label} className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-center">
               <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
                 {value}
               </div>
-              <div className="text-xs text-white/40 mt-1">{label}</div>
+              <div className="text-[11px] text-white/40 mt-0.5">{label}</div>
             </div>
           ))}
         </motion.div>
 
-        {/* Audio preview hint */}
+        {/* Animated bars hint */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 flex items-center justify-center gap-3 text-white/30 text-sm"
+          transition={{ delay: 0.9 }}
+          className="flex items-center justify-center gap-2 text-white/25 text-xs"
         >
-          <div className="flex items-center gap-1">
+          <Volume2 className="w-3.5 h-3.5" />
+          <span>Real speech — powered by your device's built-in voice engine</span>
+          <div className="flex items-end gap-0.5 ml-2">
             {Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={i}
                 className="w-0.5 rounded-full bg-violet-500/50"
-                animate={{ height: [4, 8 + Math.random() * 12, 4] }}
-                transition={{ duration: 0.8 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.1 }}
-              />
-            ))}
-          </div>
-          <span>Real AI voices — no fakes, no placeholders</span>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-0.5 rounded-full bg-cyan-500/50"
-                animate={{ height: [4, 8 + Math.random() * 12, 4] }}
-                transition={{ duration: 0.8 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.1 + 0.4 }}
+                animate={{ height: [3, 8 + Math.random() * 10, 3] }}
+                transition={{ duration: 0.7 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.08 }}
               />
             ))}
           </div>

@@ -1,145 +1,117 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Check, Zap, Crown, Building2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Check, Zap, Crown, Cpu } from 'lucide-react';
 import Link from 'next/link';
 
 const PLANS = [
   {
-    name: 'Starter',
-    price: 0,
-    period: 'Forever',
+    name: 'Free Studio',
+    price: '$0',
+    period: 'forever',
     icon: Zap,
-    description: 'Perfect for exploring and prototyping',
-    features: [
-      '50 generations/month',
-      '30 voice presets',
-      'MP3 export',
-      'Basic accents',
-      '5,000 char/generation',
-      'Community support',
-    ],
-    cta: 'Get Started Free',
+    desc: 'Full voice generation with browser speech.',
+    features: ['130+ presets', 'Unlimited generations', '11 languages', 'All sliders', 'History & favorites'],
+    cta: 'Start Free Now',
     href: '/generate',
     highlight: false,
+    available: true,
+    badge: null,
   },
   {
-    name: 'Creator',
-    price: 19,
-    period: 'per month',
+    name: 'Creator Pack',
+    price: 'Coming Soon',
+    period: '',
     icon: Crown,
-    description: 'For content creators and developers',
-    features: [
-      '500 generations/month',
-      'All 130+ voice presets',
-      'MP3 + WAV export',
-      'All accents & vibes',
-      '25,000 char/generation',
-      'Generation history',
-      'Preset favorites',
-      'Priority generation',
-      'Email support',
-    ],
-    cta: 'Start Creator Plan',
-    href: '/generate',
+    desc: 'Cloud export, premium presets, custom voices.',
+    features: ['Everything Free', 'MP3/WAV export', 'Premium presets', 'Custom preset builder', 'Extended text limits'],
+    cta: 'Join Waitlist',
+    href: '/faq',
     highlight: true,
+    available: false,
+    badge: 'Planned',
   },
   {
-    name: 'Studio',
-    price: 79,
-    period: 'per month',
-    icon: Building2,
-    description: 'For studios and production teams',
-    features: [
-      'Unlimited generations',
-      'All 130+ voice presets',
-      'MP3 + WAV + API access',
-      'Custom voice settings',
-      'Batch generation',
-      'Long-form mode (1hr+)',
-      'Priority API access',
-      'Usage analytics',
-      'Dedicated support',
-    ],
-    cta: 'Start Studio Plan',
-    href: '/generate',
+    name: 'Pro Local AI',
+    price: 'Coming Soon',
+    period: '',
+    icon: Cpu,
+    desc: 'Studio-quality voices with a local AI model.',
+    features: ['Everything Creator', 'Local AI model', 'Full privacy', 'No per-gen cost', 'Batch generation'],
+    cta: 'Join Waitlist',
+    href: '/faq',
     highlight: false,
+    available: false,
+    badge: 'Planned',
   },
 ];
 
 export function PricingSection() {
   return (
     <section id="pricing" className="py-24 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.06)_0%,transparent_70%)]" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-            Simple,{' '}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.05)_0%,transparent_70%)]" />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">
+            Honest{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
-              Transparent
-            </span>{' '}
-            Pricing
+              Pricing
+            </span>
           </h2>
-          <p className="text-white/50 text-lg">No hidden fees. Cancel anytime.</p>
+          <p className="text-white/45 text-lg">Free today. Premium when you need it.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`relative rounded-2xl p-6 flex flex-col ${
+              className={`relative rounded-2xl p-5 flex flex-col ${
                 plan.highlight
-                  ? 'bg-gradient-to-b from-violet-600/20 to-cyan-600/10 border border-violet-500/40'
+                  ? 'bg-gradient-to-b from-violet-600/18 to-cyan-600/8 border border-violet-500/35'
                   : 'bg-white/3 border border-white/8'
               }`}
             >
-              {plan.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-violet-600 to-cyan-600 text-xs font-bold text-white shadow-lg">
-                  Most Popular
+              {plan.badge && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-violet-600 text-white text-[10px] font-bold">
+                  {plan.badge}
                 </div>
               )}
 
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  plan.highlight ? 'bg-violet-500/30' : 'bg-white/8'
-                }`}>
-                  <plan.icon className="w-5 h-5 text-violet-400" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white">{plan.name}</h3>
-                  <p className="text-xs text-white/40">{plan.description}</p>
-                </div>
+              <div className="flex items-center gap-2 mb-3">
+                <plan.icon className="w-4 h-4 text-violet-400" />
+                <h3 className="font-bold text-white text-sm">{plan.name}</h3>
               </div>
 
-              <div className="mb-6">
-                <div className="flex items-end gap-1">
-                  <span className="text-4xl font-black text-white">${plan.price}</span>
-                  <span className="text-white/40 text-sm mb-1.5">/{plan.period}</span>
-                </div>
+              <div className="mb-3">
+                <span className="text-2xl font-black text-white">{plan.price}</span>
+                {plan.period && <span className="text-white/35 text-sm ml-1">{plan.period}</span>}
               </div>
 
-              <ul className="space-y-2.5 mb-8 flex-1">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-white/70">{feature}</span>
+              <p className="text-xs text-white/45 mb-4">{plan.desc}</p>
+
+              <ul className="space-y-2 mb-6 flex-1">
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    <span className="text-xs text-white/60">{f}</span>
                   </li>
                 ))}
               </ul>
 
-              <Button
-                variant={plan.highlight ? 'glow' : 'outline'}
-                size="lg"
-                className="w-full"
-                asChild
+              <Link
+                href={plan.href}
+                className={`w-full py-2.5 rounded-xl text-sm font-semibold text-center transition-all ${
+                  plan.available
+                    ? 'bg-gradient-to-r from-violet-600 to-cyan-600 text-white hover:from-violet-500 hover:to-cyan-500 shadow-lg shadow-violet-500/25'
+                    : 'bg-white/5 text-white/45 border border-white/10 hover:bg-white/8'
+                }`}
               >
-                <Link href={plan.href}>{plan.cta}</Link>
-              </Button>
+                {plan.cta}
+              </Link>
             </motion.div>
           ))}
         </div>

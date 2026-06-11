@@ -1,107 +1,50 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { Book, Code2, Zap, Settings, ArrowRight } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Documentation — VoiceGen Studio',
-};
-
-const SECTIONS = [
-  {
-    icon: Zap,
-    title: 'Quick Start',
-    desc: 'Get started with VoiceGen Studio in minutes. Set up the frontend and backend.',
-    href: '#quick-start',
-  },
-  {
-    icon: Settings,
-    title: 'Configuration',
-    desc: 'Configure TTS providers, environment variables, and storage settings.',
-    href: '#configuration',
-  },
-  {
-    icon: Code2,
-    title: 'API Reference',
-    desc: 'Full REST API documentation for voice generation, presets, and history.',
-    href: '/api-docs',
-  },
-  {
-    icon: Book,
-    title: 'Preset System',
-    desc: 'Learn how seed presets and sub-preset generation works.',
-    href: '#presets',
-  },
-];
+export const metadata: Metadata = { title: 'Documentation — VoiceGen Studio' };
 
 export default function DocsPage() {
   return (
     <div className="min-h-screen pt-20 pb-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-black text-white mb-3">Documentation</h1>
-        <p className="text-white/50 mb-10">Everything you need to deploy and extend VoiceGen Studio.</p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <h1 className="text-4xl font-black text-white mb-2">Documentation</h1>
+        <p className="text-white/45 mb-10">Everything you need to use, customize, and extend VoiceGen Studio.</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-          {SECTIONS.map((s) => (
-            <Link key={s.title} href={s.href} className="rounded-2xl border border-white/8 bg-white/3 p-5 hover:border-violet-500/30 transition-all group">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-xl bg-violet-500/15 border border-violet-500/20 flex items-center justify-center">
-                  <s.icon className="w-4 h-4 text-violet-400" />
-                </div>
-                <h3 className="font-semibold text-white group-hover:text-violet-300 transition-colors">{s.title}</h3>
-                <ArrowRight className="w-4 h-4 text-white/20 ml-auto group-hover:text-violet-400 transition-colors" />
-              </div>
-              <p className="text-sm text-white/50">{s.desc}</p>
-            </Link>
-          ))}
-        </div>
+        <div className="space-y-12">
 
-        <div className="space-y-10">
-          <section id="quick-start">
-            <h2 className="text-2xl font-bold text-white mb-4">Quick Start</h2>
-            <div className="rounded-xl border border-white/8 bg-white/3 p-5 space-y-4 text-sm text-white/70">
-              <div>
-                <h3 className="text-white font-semibold mb-2">1. Frontend Setup</h3>
-                <pre className="bg-black/30 rounded-lg p-3 text-xs font-mono text-cyan-300 overflow-x-auto">{`cd voicegen-studio
-npm install
-cp .env.example .env.local
-# Set NEXT_PUBLIC_API_URL=http://localhost:8000
-npm run dev`}</pre>
-              </div>
-              <div>
-                <h3 className="text-white font-semibold mb-2">2. Backend Setup</h3>
-                <pre className="bg-black/30 rounded-lg p-3 text-xs font-mono text-cyan-300 overflow-x-auto">{`cd backend
-pip install -r requirements.txt
-cp .env.example .env
-# Set TTS_PROVIDER=mock (for dev) or external_api (for prod)
-# Set TTS_API_KEY=your_key_here
-uvicorn main:app --reload`}</pre>
-              </div>
+          <section id="how-it-works">
+            <h2 className="text-2xl font-bold text-white mb-4">How Browser Speech Generation Works</h2>
+            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm text-white/60 space-y-3 leading-relaxed">
+              <p>VoiceGen Studio uses the <strong className="text-white">Web Speech API</strong> — specifically the <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">SpeechSynthesis</code> interface built into modern browsers.</p>
+              <p>When you click Generate, the app creates a <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">SpeechSynthesisUtterance</code> with your text and maps your VoiceGen settings (speed, pitch, volume) to the browser's parameters. The browser's TTS engine speaks the text through your device's audio output.</p>
+              <p>No audio data is recorded, no server is contacted, and no API key is used. The entire process is local to your device.</p>
             </div>
           </section>
 
-          <section id="configuration">
-            <h2 className="text-2xl font-bold text-white mb-4">Environment Variables</h2>
-            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm">
-              <table className="w-full text-left">
+          <section id="browser">
+            <h2 className="text-2xl font-bold text-white mb-4" id="browser">Browser Support Notes</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-white/8 rounded-xl overflow-hidden">
                 <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="pb-2 text-xs text-white/40 font-medium">Variable</th>
-                    <th className="pb-2 text-xs text-white/40 font-medium">Default</th>
-                    <th className="pb-2 text-xs text-white/40 font-medium">Description</th>
+                  <tr className="bg-white/5 border-b border-white/8">
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold uppercase">Browser</th>
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold uppercase">Voice Count</th>
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold uppercase">Quality</th>
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold uppercase">Notes</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {[
-                    ['TTS_PROVIDER', 'mock', 'TTS provider: mock | external_api | local_model'],
-                    ['TTS_API_KEY', '—', 'API key for external TTS provider'],
-                    ['AUDIO_STORAGE_PATH', './audio', 'Path to store generated audio files'],
-                    ['DATABASE_URL', '—', 'PostgreSQL connection string (optional)'],
-                    ['NEXT_PUBLIC_API_URL', 'http://localhost:8000', 'Backend API base URL'],
-                  ].map(([key, def, desc]) => (
-                    <tr key={key}>
-                      <td className="py-2.5 pr-4 font-mono text-xs text-violet-400">{key}</td>
-                      <td className="py-2.5 pr-4 font-mono text-xs text-white/30">{def}</td>
-                      <td className="py-2.5 text-xs text-white/50">{desc}</td>
+                    ['Chrome (Win/Mac)', '20–50+', '⭐⭐⭐⭐', 'Most voices, best multilingual support'],
+                    ['Edge (Windows)', '30–60+', '⭐⭐⭐⭐⭐', 'Highest quality neural voices on Windows 11'],
+                    ['Safari (Mac/iOS)', '15–40+', '⭐⭐⭐⭐', 'Excellent on Apple devices, good iOS voices'],
+                    ['Firefox', '5–20', '⭐⭐⭐', 'Fewer voices, may need system voice install'],
+                    ['Chrome (Android)', '5–15', '⭐⭐⭐', 'Depends on Android TTS engine installation'],
+                  ].map(([browser, count, quality, notes]) => (
+                    <tr key={browser as string}>
+                      <td className="px-4 py-3 text-white/70">{browser}</td>
+                      <td className="px-4 py-3 text-violet-400 font-mono text-xs">{count}</td>
+                      <td className="px-4 py-3">{quality}</td>
+                      <td className="px-4 py-3 text-white/45 text-xs">{notes}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -110,17 +53,76 @@ uvicorn main:app --reload`}</pre>
           </section>
 
           <section id="presets">
-            <h2 className="text-2xl font-bold text-white mb-4">Preset System</h2>
-            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm text-white/60 space-y-3">
-              <p>VoiceGen Studio uses a two-tier preset system:</p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li><strong className="text-white">Seed Presets</strong> — 28+ hand-crafted presets defined in <code className="text-violet-400 text-xs">/data/seedPresets.ts</code>.</li>
-                <li><strong className="text-white">Sub-Presets</strong> — 100+ auto-generated variations created by <code className="text-violet-400 text-xs">generateSubPresets()</code> in <code className="text-violet-400 text-xs">/data/subPresetGenerator.ts</code>.</li>
-              </ul>
-              <p>Each sub-preset keeps a <code className="text-violet-400 text-xs">parentPresetId</code> reference, applies one of 15 variant definitions, and clamps all settings to valid ranges.</p>
-              <p>To add new presets, add to the <code className="text-violet-400 text-xs">SEED_PRESETS</code> array. Sub-presets are generated automatically on import.</p>
+            <h2 className="text-2xl font-bold text-white mb-4">How Presets Work</h2>
+            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm text-white/60 space-y-3 leading-relaxed">
+              <p>Each <strong className="text-white">Seed Preset</strong> is a hand-crafted <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">VoiceProfile</code> object defined in <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">/data/seedPresets.ts</code>.</p>
+              <p>A preset includes: name, description, category, vibe, accent, language, and all 9 voice parameter values. These are applied directly to the browser's SpeechSynthesisUtterance when you select a preset and click Generate.</p>
             </div>
           </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4">How Sub-Presets Work</h2>
+            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm text-white/60 space-y-3 leading-relaxed">
+              <p>Sub-presets are automatically generated by <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">generateSubPresets()</code> in <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">/data/subPresetGenerator.ts</code>.</p>
+              <p>Each seed preset gets 4 variants from 15 available variant types (Cinematic Trailer, Podcast, Reels Cut, Dark Version, etc.). All settings are clamped to valid ranges. Sub-presets keep a <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">parentPresetId</code> reference.</p>
+            </div>
+          </section>
+
+          <section id="settings">
+            <h2 className="text-2xl font-bold text-white mb-4">How Settings Affect Output</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-white/8 rounded-xl overflow-hidden">
+                <thead>
+                  <tr className="bg-white/5 border-b border-white/8">
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold">Setting</th>
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold">Browser Mapping</th>
+                    <th className="px-4 py-3 text-left text-xs text-white/40 font-semibold">Effect</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {[
+                    ['Speed (0.5–2.0)', 'utterance.rate', 'How fast the voice speaks'],
+                    ['Pitch (0.5–1.5)', 'utterance.pitch', 'Higher = squeaky, lower = deep'],
+                    ['Clarity (0.0–1.0)', 'utterance.volume (partial)', 'Influences perceived volume/crispness'],
+                    ['Language', 'utterance.lang + voice selection', 'Picks the best matching system voice'],
+                    ['Emotional Depth, Stability, etc.', 'Preset metadata only', 'Used for preset filtering & future AI models'],
+                  ].map(([s, m, e]) => (
+                    <tr key={s as string}>
+                      <td className="px-4 py-3 text-violet-400 text-xs font-mono">{s}</td>
+                      <td className="px-4 py-3 text-cyan-400 text-xs font-mono">{m}</td>
+                      <td className="px-4 py-3 text-white/50 text-xs">{e}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4">How to Add New Presets</h2>
+            <div className="rounded-xl border border-white/8 bg-white/3 p-5 text-sm">
+              <ol className="space-y-3 text-white/60 list-decimal list-inside">
+                <li>Open <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">/data/seedPresets.ts</code></li>
+                <li>Add a new <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">VoiceProfile</code> object to the <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">SEED_PRESETS</code> array</li>
+                <li>Sub-presets are generated automatically on the next import — no extra steps</li>
+                <li>Use "Copy Settings JSON" in the studio to capture your fine-tuned settings</li>
+              </ol>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-white mb-4">Future Upgrade Path</h2>
+            <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5 text-sm text-white/60 space-y-3 leading-relaxed">
+              <p>When you're ready to upgrade from browser speech to AI-quality voices:</p>
+              <ol className="space-y-2 list-decimal list-inside">
+                <li>Run the Python FastAPI backend: <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">cd backend && uvicorn main:app --reload</code></li>
+                <li>Set <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">TTS_PROVIDER=external_api</code> and <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">TTS_API_KEY=your_key</code> in <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">backend/.env</code></li>
+                <li>Set <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">NEXT_PUBLIC_API_URL=http://localhost:8000</code> in <code className="text-violet-400 text-xs bg-violet-500/10 px-1.5 rounded">.env.local</code></li>
+                <li>The BrowserVoiceGenerator will switch to backend-powered generation automatically</li>
+              </ol>
+            </div>
+          </section>
+
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ interface VoiceGenStore {
   scriptText: string;
   audioFormat: 'mp3' | 'wav';
   isGenerating: boolean;
+  isSpeaking: boolean;
   lastGenerationResult: { audioUrl: string; generationId: string; duration: number } | null;
   generationError: string | null;
 
@@ -30,6 +31,7 @@ interface VoiceGenStore {
   setScriptText: (text: string) => void;
   setAudioFormat: (format: 'mp3' | 'wav') => void;
   setIsGenerating: (v: boolean) => void;
+  setIsSpeaking: (v: boolean) => void;
   setGenerationResult: (result: { audioUrl: string; generationId: string; duration: number } | null) => void;
   setGenerationError: (error: string | null) => void;
   addToHistory: (item: GenerationHistory) => void;
@@ -65,6 +67,7 @@ export const useVoiceGenStore = create<VoiceGenStore>()(
       scriptText: '',
       audioFormat: 'mp3',
       isGenerating: false,
+      isSpeaking: false,
       lastGenerationResult: null,
       generationError: null,
       history: [],
@@ -87,6 +90,7 @@ export const useVoiceGenStore = create<VoiceGenStore>()(
       setScriptText: (text) => set({ scriptText: text }),
       setAudioFormat: (format) => set({ audioFormat: format }),
       setIsGenerating: (v) => set({ isGenerating: v }),
+      setIsSpeaking: (v) => set({ isSpeaking: v }),
       setGenerationResult: (result) => set({ lastGenerationResult: result }),
       setGenerationError: (error) => set({ generationError: error }),
 
@@ -118,6 +122,7 @@ export const useVoiceGenStore = create<VoiceGenStore>()(
         history: state.history,
         favoritePresetIds: state.favoritePresetIds,
         audioFormat: state.audioFormat,
+        scriptText: state.scriptText,
       }),
     }
   )

@@ -113,7 +113,7 @@ export type GenerationHistory = {
   duration: number;
   settingsUsed: VoiceSettings;
   createdAt: string;
-  format: 'mp3' | 'wav';
+  format: 'mp3' | 'wav' | 'browser';
 };
 
 export type FilterState = {
