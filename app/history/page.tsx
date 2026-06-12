@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { History, Trash2, RefreshCw, Mic2, Play, Square, Download, FileJson } from 'lucide-react';
+import { History, Trash2, RefreshCw, Mic2, Play, Square, FileJson } from 'lucide-react';
 import { useVoiceGenStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { ALL_PRESETS } from '@/data/allPresets';
@@ -34,7 +34,8 @@ export default function HistoryPage() {
     speak({
       text: item.text,
       settings: item.settingsUsed,
-      onEnd: () => setPlayingId(null),
+      onStart: () => {},
+      onEnd:   () => setPlayingId(null),
       onError: () => setPlayingId(null),
     });
   };
@@ -75,17 +76,23 @@ export default function HistoryPage() {
               </div>
               <h1 className="text-2xl font-black text-white">Generation History</h1>
             </div>
-            <p className="text-white/45 text-sm">{history.length} generation{history.length !== 1 ? 's' : ''} saved to browser storage</p>
+            <p className="text-white/45 text-sm">
+              {history.length} generation{history.length !== 1 ? 's' : ''} saved in your browser
+            </p>
           </div>
 
           {history.length > 0 && (
             <div className="flex items-center gap-2">
               <Button variant="secondary" size="sm" onClick={exportHistoryJSON}>
-                <FileJson className="w-3.5 h-3.5" />
+                <FileJson className="w-3.5 h-3.5 mr-1.5" />
                 Export JSON
               </Button>
-              <Button variant="ghost" size="sm" onClick={clearHistory} className="text-red-400 hover:text-red-300">
-                <Trash2 className="w-3.5 h-3.5" />
+              <Button
+                variant="ghost" size="sm"
+                onClick={clearHistory}
+                className="text-red-400 hover:text-red-300"
+              >
+                <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                 Clear All
               </Button>
             </div>
@@ -99,14 +106,16 @@ export default function HistoryPage() {
               <Mic2 className="w-8 h-8 text-white/15" />
             </div>
             <h3 className="text-white/40 font-semibold mb-2">No generations yet</h3>
-            <p className="text-white/25 text-sm mb-6">Generate your first voice in the studio and save it here.</p>
+            <p className="text-white/25 text-sm mb-6">
+              Generate a voice in the studio and click Save to store it here.
+            </p>
             <Button variant="glow" size="lg" onClick={() => router.push('/generate')}>
               Open Voice Studio
             </Button>
           </div>
         )}
 
-        {/* List */}
+        {/* History list */}
         <div className="space-y-3">
           <AnimatePresence>
             {history.map((item, i) => (
@@ -114,89 +123,97 @@ export default function HistoryPage() {
                 key={item.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -20, height: 0 }}
+                exit={{ opacity: 0, x: -20 }}
                 transition={{ delay: i * 0.03 }}
-                className="rounded-2xl border border-white/8 bg-white/3 overflow-hidden hover:border-white/12 transition-all"
+                className="rounded-2xl border border-white/8 bg-white/3 hover:border-white/12 transition-all"
               >
                 <div className="p-5">
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
                     <div className="flex-1 min-w-0">
-                      {/* Meta */}
+                      {/* Meta row */}
                       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                         <span className="font-semibold text-white text-sm">{item.presetName}</span>
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/8 text-white/35 font-mono uppercase">
                           {item.format}
                         </span>
-                        <span className="text-[10px] text-white/30 ml-auto">
+                        <span className="text-[10px] text-white/25 ml-auto hidden sm:block">
                           {formatDate(item.createdAt)}
                         </span>
                       </div>
 
                       {/* Text snippet */}
                       <p className="text-xs text-white/45 line-clamp-2 mb-3 leading-relaxed">
-                        "{item.text.slice(0, 120)}{item.text.length > 120 ? '…' : ''}"
+                        "{item.text.slice(0, 140)}{item.text.length > 140 ? '…' : ''}"
                       </p>
 
-                      {/* Settings pills */}
+                      {/* Settings badges */}
                       <div className="flex flex-wrap gap-1.5">
                         {[
                           item.settingsUsed.language,
-                          `${item.settingsUsed.speed.toFixed(1)}x`,
+                          `${item.settingsUsed.speed.toFixed(1)}×`,
                           `pitch ${item.settingsUsed.pitch.toFixed(2)}`,
                           `≈${Math.round(item.duration)}s`,
                         ].map((tag) => (
-                          <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-white/35 font-mono">
+                          <span
+                            key={tag}
+                            className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-white/35 font-mono"
+                          >
                             {tag}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    {/* Actions */}
+                    {/* Action buttons */}
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                       <Button
                         variant={playingId === item.id ? 'destructive' : 'outline'}
                         size="icon-sm"
-                        title="Play/Stop in browser"
+                        title={playingId === item.id ? 'Stop' : 'Play in browser'}
                         onClick={() => handlePlay(item)}
                       >
                         {playingId === item.id
                           ? <Square className="w-3.5 h-3.5" />
-                          : <Play className="w-3.5 h-3.5" />}
+                          : <Play   className="w-3.5 h-3.5" />}
                       </Button>
                       <Button
-                        variant="ghost"
-                        size="icon-sm"
+                        variant="ghost" size="icon-sm"
                         title="Load into generator"
                         onClick={() => handleRegenerate(item)}
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
                       </Button>
                       <Button
-                        variant="ghost"
-                        size="icon-sm"
+                        variant="ghost" size="icon-sm"
                         title="Delete"
                         className="text-red-400/60 hover:text-red-400"
-                        onClick={() => removeFromHistory(item.id)}
+                        onClick={() => {
+                          if (playingId === item.id) { stopSpeaking(); setPlayingId(null); }
+                          removeFromHistory(item.id);
+                        }}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
                   </div>
 
-                  {/* Active playing indicator */}
+                  {/* Waveform while playing */}
                   {playingId === item.id && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex items-end gap-0.5 h-5 mt-3"
+                      className="flex items-end gap-[3px] h-5 mt-3"
                     >
                       {Array.from({ length: 32 }).map((_, j) => (
                         <motion.div
                           key={j}
-                          className="w-0.5 rounded-full bg-gradient-to-t from-violet-600 to-cyan-400"
-                          animate={{ height: [2, Math.random() * 16 + 3, 2] }}
-                          transition={{ duration: 0.3 + Math.random() * 0.3, repeat: Infinity, delay: j * 0.04 }}
+                          className="rounded-full flex-1 max-w-[5px] bg-gradient-to-t from-violet-600 to-cyan-400"
+                          animate={{ height: [2, 4 + (j % 5) * 3, 2] }}
+                          transition={{
+                            duration: 0.3 + (j % 4) * 0.07,
+                            repeat: Infinity,
+                            delay: j * 0.04,
+                          }}
                         />
                       ))}
                     </motion.div>
@@ -207,10 +224,9 @@ export default function HistoryPage() {
           </AnimatePresence>
         </div>
 
-        {/* Storage note */}
         {history.length > 0 && (
           <p className="mt-6 text-xs text-white/20 text-center">
-            History is stored in your browser's localStorage. It will persist across sessions on this device.
+            History stored in browser localStorage — persists across sessions on this device.
           </p>
         )}
       </div>
